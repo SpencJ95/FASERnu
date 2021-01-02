@@ -142,7 +142,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
   if(!source) {
     //source = new ifstream("gen_ntuple2/input/numu_faser_1M.dump._001.txt");
-    source = new ifstream("../fnumin/gen_ntuple2/input/anumu_faser_1M.dump._001.txt");
+    source = new ifstream("../fasernu/gen_ntuple2/input/anumu_faser_1M.dump._001.txt");
     if(!source->is_open()) {
       printf("Error opening file numu_faser_1M.dump.txt");
       exit(1);
@@ -293,15 +293,107 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // fParticleGun->SetParticlePosition(G4ThreeVector(0,0,0));
   // fParticleGun->GeneratePrimaryVertex(anEvent);
 
-  // single particle gun:
+  // // single particle gun:
   fParticleGun->SetParticleDefinition(fElectron);
-  fParticleGun->SetParticleEnergy(G4RandFlat::shoot(1,3000)*GeV);
+  fParticleGun->SetParticleEnergy(1.0*GeV);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
   fParticleGun->SetParticlePosition(G4ThreeVector(0,0,-worldZHalfLength));
-  // // fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,-1,0.2));
-  // // fParticleGun->SetParticlePosition(G4ThreeVector(0,worldYHalfLength,-2.5*cm));
+  // fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,-1,0.2));
+  // fParticleGun->SetParticlePosition(G4ThreeVector(0,worldYHalfLength,-2.5*cm));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 
+/*
+  // FASERnu muons:
+  // // randomized
+  // e_beam = G4RandFlat::shoot(0.,7000.);
+  // id_beam = 13;
+  // x_beam = G4RandFlat::shoot(-12.5,12.5);
+  // y_beam = G4RandFlat::shoot(-12.5,12.5);
+
+  // //fParticleGun->SetParticleDefinition(fElectron);
+  // fParticleGun->SetParticleDefinition(fMuonM);
+  // fParticleGun->SetParticleEnergy(e_beam*GeV);
+  // fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
+  // fParticleGun->SetParticlePosition(G4ThreeVector(x_beam*cm,y_beam*cm,-worldZHalfLength));
+  // fParticleGun->GeneratePrimaryVertex(anEvent);
+  // //printf("%g, %g, %g\n",e_beam,x_beam,y_beam);
+
+
+  // FASERnu text read:
+  float tmp1, tmp2, tmp3, tmp4;
+  int i1, i2, i3;
+  bool start = false;
+  string line;
+  while ( getline(*source,line) ) {
+    if(line.compare(0,5,"event")==0) {
+      if(!start) {
+	start = true;
+	continue;
+      }
+      else break;
+    }
+    else if(line.compare(0,5,"info:")==0) {
+      sscanf(line.data(),"info: %d %d %f %f %d",&i1,&i2,&tmp1,&tmp2,&i3);
+      pdgnu_nuEvt = i1; pdglep_nuEvt = i2; cc_nuEvt = i3; Enu_nuEvt = tmp1; Plep_nuEvt = tmp2;
+      x_nuEvt = G4RandFlat::shoot(-12.5,12.5);
+      y_nuEvt = G4RandFlat::shoot(-12.5,12.5);
+      z_nuEvt = G4RandFlat::shoot(-69.65,60.35); // 130(Calo)+9.3(Silicon)
+      e_beam = 0; id_beam = 0; x_beam = 0; y_beam = 0;
+      start = true;
+    }
+    else if(start) {
+      sscanf(line.data(),"%d %f %f %f %f",&i1,&tmp1,&tmp2,&tmp3,&tmp4);
+
+      if(i1==11) fParticleGun->SetParticleDefinition(fElectron);
+      else if(i1==-11) fParticleGun->SetParticleDefinition(fPositron);
+      else if(i1==13) fParticleGun->SetParticleDefinition(fMuonM);
+      else if(i1==-13) fParticleGun->SetParticleDefinition(fMuonP);
+      else if(i1==211) fParticleGun->SetParticleDefinition(fPionP);
+      else if(i1==-211) fParticleGun->SetParticleDefinition(fPionM);
+      else if(i1==111) fParticleGun->SetParticleDefinition(fPi0);
+      else if(i1==2212) fParticleGun->SetParticleDefinition(fProton);
+      else if(i1==-2212) fParticleGun->SetParticleDefinition(fProtonB);
+      else if(i1==2112) fParticleGun->SetParticleDefinition(fNeutron);
+      else if(i1==-2112) fParticleGun->SetParticleDefinition(fNeutronB);
+      else if(i1==22) fParticleGun->SetParticleDefinition(fPhoton);
+      else if(i1==311) fParticleGun->SetParticleDefinition(fK0);
+      else if(i1==-311) fParticleGun->SetParticleDefinition(fK0B);
+      else if(i1==130) fParticleGun->SetParticleDefinition(fKL0);
+      else if(i1==-321) fParticleGun->SetParticleDefinition(fKaonM);
+      else if(i1==321) fParticleGun->SetParticleDefinition(fKaonP);
+      else if(i1==3112) fParticleGun->SetParticleDefinition(fSigmaM);
+      else if(i1==-3112) fParticleGun->SetParticleDefinition(fSigmaBP);
+      else if(i1==3222) fParticleGun->SetParticleDefinition(fSigmaP);
+      else if(i1==-3222) fParticleGun->SetParticleDefinition(fSigmaBM);
+      else if(i1==4212) fParticleGun->SetParticleDefinition(fSigma_cP);
+      else if(i1==-4212) fParticleGun->SetParticleDefinition(fSigma_cBM);
+      else if(i1==3122) fParticleGun->SetParticleDefinition(fLambda0);
+      else if(i1==-3122) fParticleGun->SetParticleDefinition(fLambda0B);
+      else if(i1==4122) fParticleGun->SetParticleDefinition(fLambda_cP);
+      else if(i1==-4122) fParticleGun->SetParticleDefinition(fLambda_cBM);
+      else if(i1==411) fParticleGun->SetParticleDefinition(fDP);
+      else if(i1==-411) fParticleGun->SetParticleDefinition(fDM);
+      else if(i1==421) fParticleGun->SetParticleDefinition(fD0);
+      else if(i1==-421) fParticleGun->SetParticleDefinition(fD0B);
+      else if(i1==431) fParticleGun->SetParticleDefinition(fDsP);
+      else if(i1==-431) fParticleGun->SetParticleDefinition(fDsM);
+      else {
+	if(abs(i1)!=12 && abs(i1)!=16) {
+	  printf("Error: Unkown particle ID: %d\n",i1);
+	}
+	continue;
+      }
+
+      //printf("Xin: %d %f %f %f %f\n",i1,tmp1,tmp2,tmp3,tmp4);
+
+      fParticleGun->SetParticleEnergy(tmp1*GeV);
+      fParticleGun->SetParticleMomentumDirection(G4ThreeVector(tmp2,tmp3,tmp4));
+      fParticleGun->SetParticlePosition(G4ThreeVector(x_nuEvt*cm,y_nuEvt*cm,z_nuEvt*cm));
+      fParticleGun->GeneratePrimaryVertex(anEvent);
+    }
+  }
+  printf("Xin: %d %d %d %f %f\n",pdgnu_nuEvt,pdglep_nuEvt,cc_nuEvt,Enu_nuEvt,Plep_nuEvt);
+*/  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
