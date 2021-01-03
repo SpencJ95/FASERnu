@@ -295,7 +295,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // // single particle gun:
   fParticleGun->SetParticleDefinition(fElectron);
-  fParticleGun->SetParticleEnergy(1.0*GeV);
+  fParticleGun->SetParticleEnergy(G4UniformRand()*3000.*GeV);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
   fParticleGun->SetParticlePosition(G4ThreeVector(0,0,-worldZHalfLength));
   // fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,-1,0.2));
