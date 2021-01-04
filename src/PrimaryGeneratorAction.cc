@@ -344,47 +344,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
     else if(start) {
       sscanf(line.data(),"%d %f %f %f %f",&i1,&tmp1,&tmp2,&tmp3,&tmp4);
-
-      if(i1==11) fParticleGun->SetParticleDefinition(fElectron);
-      else if(i1==-11) fParticleGun->SetParticleDefinition(fPositron);
-      else if(i1==13) fParticleGun->SetParticleDefinition(fMuonM);
-      else if(i1==-13) fParticleGun->SetParticleDefinition(fMuonP);
-      else if(i1==211) fParticleGun->SetParticleDefinition(fPionP);
-      else if(i1==-211) fParticleGun->SetParticleDefinition(fPionM);
-      else if(i1==111) fParticleGun->SetParticleDefinition(fPi0);
-      else if(i1==2212) fParticleGun->SetParticleDefinition(fProton);
-      else if(i1==-2212) fParticleGun->SetParticleDefinition(fProtonB);
-      else if(i1==2112) fParticleGun->SetParticleDefinition(fNeutron);
-      else if(i1==-2112) fParticleGun->SetParticleDefinition(fNeutronB);
-      else if(i1==22) fParticleGun->SetParticleDefinition(fPhoton);
-      else if(i1==311) fParticleGun->SetParticleDefinition(fK0);
-      else if(i1==-311) fParticleGun->SetParticleDefinition(fK0B);
-      else if(i1==130) fParticleGun->SetParticleDefinition(fKL0);
-      else if(i1==-321) fParticleGun->SetParticleDefinition(fKaonM);
-      else if(i1==321) fParticleGun->SetParticleDefinition(fKaonP);
-      else if(i1==3112) fParticleGun->SetParticleDefinition(fSigmaM);
-      else if(i1==-3112) fParticleGun->SetParticleDefinition(fSigmaBP);
-      else if(i1==3222) fParticleGun->SetParticleDefinition(fSigmaP);
-      else if(i1==-3222) fParticleGun->SetParticleDefinition(fSigmaBM);
-      else if(i1==4212) fParticleGun->SetParticleDefinition(fSigma_cP);
-      else if(i1==-4212) fParticleGun->SetParticleDefinition(fSigma_cBM);
-      else if(i1==3122) fParticleGun->SetParticleDefinition(fLambda0);
-      else if(i1==-3122) fParticleGun->SetParticleDefinition(fLambda0B);
-      else if(i1==4122) fParticleGun->SetParticleDefinition(fLambda_cP);
-      else if(i1==-4122) fParticleGun->SetParticleDefinition(fLambda_cBM);
-      else if(i1==411) fParticleGun->SetParticleDefinition(fDP);
-      else if(i1==-411) fParticleGun->SetParticleDefinition(fDM);
-      else if(i1==421) fParticleGun->SetParticleDefinition(fD0);
-      else if(i1==-421) fParticleGun->SetParticleDefinition(fD0B);
-      else if(i1==431) fParticleGun->SetParticleDefinition(fDsP);
-      else if(i1==-431) fParticleGun->SetParticleDefinition(fDsM);
-      else {
-	if(abs(i1)!=12 && abs(i1)!=16) {
-	  printf("Error: Unkown particle ID: %d\n",i1);
-	}
-	continue;
-      }
-
+      fParticleGun->SetParticleDefinition(fElectron); 
       //printf("Xin: %d %f %f %f %f\n",i1,tmp1,tmp2,tmp3,tmp4);
 
       fParticleGun->SetParticleEnergy(tmp1*GeV);
