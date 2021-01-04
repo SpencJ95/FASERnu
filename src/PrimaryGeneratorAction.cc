@@ -142,7 +142,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
   if(!source) {
     //source = new ifstream("gen_ntuple2/input/numu_faser_1M.dump._001.txt");
-    source = new ifstream("../fnumin/gen_ntuple2/input/anumu_faser_1M.dump._001.txt");
+    source = new ifstream("../fasernu/gen_ntuple2/input/anumu_faser_1M.dump._001.txt");
     if(!source->is_open()) {
       printf("Error opening file numu_faser_1M.dump.txt");
       exit(1);
@@ -334,7 +334,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
     else if(line.compare(0,5,"info:")==0) {
       sscanf(line.data(),"info: %d %d %f %f %d",&i1,&i2,&tmp1,&tmp2,&i3);
-      pdgnu_nuEvt = i1; pdglep_nuEvt = i2; cc_nuEvt = i3; Enu_nuEvt = tmp1; Plep_nuEvt = tmp2;
+      pdgnu_nuEvt = 11; pdglep_nuEvt = 11; cc_nuEvt = 0; Enu_nuEvt = tmp1; Plep_nuEvt = tmp2;
       x_nuEvt = G4RandFlat::shoot(-12.5,12.5);
       y_nuEvt = G4RandFlat::shoot(-12.5,12.5);
       z_nuEvt = G4RandFlat::shoot(-69.65,60.35); // 130(Calo)+9.3(Silicon)
