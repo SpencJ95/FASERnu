@@ -387,8 +387,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       //printf("Xin: %d %f %f %f %f\n",i1,tmp1,tmp2,tmp3,tmp4);
 
       fParticleGun->SetParticleEnergy(tmp1*GeV);
-      fParticleGun->SetParticleMomentumDirection(G4ThreeVector(tmp2,tmp3,tmp4));
-      fParticleGun->SetParticlePosition(G4ThreeVector(x_nuEvt*cm,y_nuEvt*cm,z_nuEvt*cm));
+      fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
+      fParticleGun->SetParticlePosition(G4ThreeVector(0,0,-worldZHalfLength));
       fParticleGun->GeneratePrimaryVertex(anEvent);
     }
   }
