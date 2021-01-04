@@ -293,16 +293,16 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // fParticleGun->SetParticlePosition(G4ThreeVector(0,0,0));
   // fParticleGun->GeneratePrimaryVertex(anEvent);
 
-  // // single particle gun:
+/*  // // single particle gun:
   fParticleGun->SetParticleDefinition(fElectron);
   fParticleGun->SetParticleEnergy(G4UniformRand()*3000.*GeV);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
   fParticleGun->SetParticlePosition(G4ThreeVector(0,0,-worldZHalfLength));
   // fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,-1,0.2));
   // fParticleGun->SetParticlePosition(G4ThreeVector(0,worldYHalfLength,-2.5*cm));
-  fParticleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);*/
 
-/*
+
   // FASERnu muons:
   // // randomized
   // e_beam = G4RandFlat::shoot(0.,7000.);
@@ -334,7 +334,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
     else if(line.compare(0,5,"info:")==0) {
       sscanf(line.data(),"info: %d %d %f %f %d",&i1,&i2,&tmp1,&tmp2,&i3);
-      pdgnu_nuEvt = i1; pdglep_nuEvt = i2; cc_nuEvt = i3; Enu_nuEvt = tmp1; Plep_nuEvt = tmp2;
+      pdgnu_nuEvt = 11; pdglep_nuEvt = 11; cc_nuEvt = 0; Enu_nuEvt = tmp1; Plep_nuEvt = tmp2;
       x_nuEvt = G4RandFlat::shoot(-12.5,12.5);
       y_nuEvt = G4RandFlat::shoot(-12.5,12.5);
       z_nuEvt = G4RandFlat::shoot(-69.65,60.35); // 130(Calo)+9.3(Silicon)
@@ -343,7 +343,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
     else if(start) {
       sscanf(line.data(),"%d %f %f %f %f",&i1,&tmp1,&tmp2,&tmp3,&tmp4);
-
+/*
       if(i1==11) fParticleGun->SetParticleDefinition(fElectron);
       else if(i1==-11) fParticleGun->SetParticleDefinition(fPositron);
       else if(i1==13) fParticleGun->SetParticleDefinition(fMuonM);
@@ -383,17 +383,18 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	}
 	continue;
       }
-
+*/
+      fParticleGun->SetParticleDefinition(fElectron);
       //printf("Xin: %d %f %f %f %f\n",i1,tmp1,tmp2,tmp3,tmp4);
 
       fParticleGun->SetParticleEnergy(tmp1*GeV);
       fParticleGun->SetParticleMomentumDirection(G4ThreeVector(tmp2,tmp3,tmp4));
-      fParticleGun->SetParticlePosition(G4ThreeVector(x_nuEvt*cm,y_nuEvt*cm,z_nuEvt*cm));
+      fParticleGun->SetParticlePosition(G4ThreeVector(x_nuEvt*cm,y_nuEvt*cm,-worldZHalfLength));
       fParticleGun->GeneratePrimaryVertex(anEvent);
     }
   }
   printf("Xin: %d %d %d %f %f\n",pdgnu_nuEvt,pdglep_nuEvt,cc_nuEvt,Enu_nuEvt,Plep_nuEvt);
-*/  
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
