@@ -339,6 +339,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       y_nuEvt = G4RandFlat::shoot(-12.5,12.5);
       z_nuEvt = G4RandFlat::shoot(-69.65,60.35); // 130(Calo)+9.3(Silicon)
       e_beam = 0; id_beam = 0; x_beam = 0; y_beam = 0;
+      i1=11;
       start = true;
     }
     else if(start) {
